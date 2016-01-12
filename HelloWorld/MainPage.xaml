@@ -1,0 +1,22 @@
+﻿<Page
+    x:Class="WIFIScan.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WIFIScan"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TextBlock x:Name="Mesaj" HorizontalAlignment="Left" Margin="34,74,0,0" TextWrapping="Wrap" Text="WiFi map" VerticalAlignment="Top" FontSize="24"/>
+        <TextBlock x:Name="MesajFin" HorizontalAlignment="Left" Margin="53,111,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="24"/>
+        <Button x:Name="BScan" Content="Scan" HorizontalAlignment="Left" Margin="34,148,0,0" VerticalAlignment="Top" Click="BScan_Click" RenderTransformOrigin="-3.157,0.75"/>
+        <ListBox x:Name="listBox1" HorizontalAlignment="Left" Margin="10,253,0,0" VerticalAlignment="Top" Width="340"/>
+        <Button x:Name="JsonButton" Content="ToJSON" HorizontalAlignment="Left" Margin="90,148,0,0" VerticalAlignment="Top" Click="JsonButton_Click"/>
+        <Button x:Name="ResultButton" Content="Result" HorizontalAlignment="Left" Margin="166,148,0,0" VerticalAlignment="Top" Click="ResultButton_Click"/>
+        <Button x:Name="ClientBtn" Content="Client" HorizontalAlignment="Left" Margin="125,185,0,0" VerticalAlignment="Top" Click="ClientBtn_Click" RenderTransformOrigin="-1.724,-0.281"/>
+        <Button x:Name="ComputeBtn" Content="Compute" HorizontalAlignment="Left" Margin="188,185,0,0" VerticalAlignment="Top" Click="ComputeBtn_Click"/>
+        <Button x:Name="readJsonBtn" Content="readJSON" HorizontalAlignment="Left" Margin="34,185,0,0" VerticalAlignment="Top" Click="readJsonBtn_Click"/>
+
+    </Grid>
+</Page>
