@@ -24,21 +24,59 @@ namespace WIFIScan
     {
         Dictionary<int, string> Areas = new Dictionary<int, string>(); //Dictionary for the area names (names are auto. generated)
         int areaNb = -1; // used to set the id for each scanned area
-        private IReadOnlyList<WiFiAdapter> wiFiAdapters; //list of all wifi adapters
-        WiFiAdapter adapter, adapter2; //the adapter we use
         WiFiNetworkReport report; //report containing the networks and the dbm values of the scan
         NameValueCollection scanVals = new NameValueCollection(); //collection holding the network names and the dbm values obtained from scans
         Dictionary<string, Dictionary<string, object>> WifiMap = new Dictionary<string, Dictionary<string, object>>(); //dict of area maps - final map stored here
         Dictionary<string, Dictionary<string, object>> WifiMapImported;//imported map from JSON conversion.
         Dictionary<string, object> AreaWifiMap; //Dictionary containg the mapping for one particular area
         Dictionary<string, double> ClientScan = new Dictionary<string, double>(); //results from client scan for networks
-        List<KeyValuePair<string, double>> myList, finalList; //lists used to sort some values
+        List<KeyValuePair<string, double>> myList, finalList, distanceList; //lists used to sort some values
         NameValueCollection AreaswithErrorvals = new NameValueCollection(); //nvc that stores the errors for each area
         Dictionary<string, double> AreasWithError = new Dictionary<string, double>(); //
 
         public MainPage()
         {
             this.InitializeComponent();
+            if(GlobalStuff.WifiAccessState == true)
+            {
+                buttonWifiSetup.Content = "Wifiset Done!";
+                buttonWifiSetup.IsEnabled = false;
+
+            }
+        }
+
+
+
+        private async void buttonWifiSetup_Click(object sender, RoutedEventArgs e)
+        {
+            // RequestAccessAsync must have been called at least once by the app before using the API
+            // Calling it multiple times is fine but not necessary
+            // RequestAccessAsync must be called from the UI thread
+            GlobalStuff.WifiAccess = await WiFiAdapter.RequestAccessAsync();
+            if (GlobalStuff.WifiAccess != WiFiAccessStatus.Allowed)
+            {
+                GlobalStuff.WifiAccessState = false;
+                buttonWifiSetup.Content = "Wifiset Failed!";
+            }
+            else
+            {
+                GlobalStuff.WifiAccessState = true;
+                if (GlobalStuff.WiFiAdapters == null)
+                {
+                    try
+                    {
+                        GlobalStuff.WiFiAdapters = await WiFiAdapter.FindAllAdaptersAsync();
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                }
+               GlobalStuff.AdapterWifi = GlobalStuff.WiFiAdapters.First();
+                buttonWifiSetup.Content = "Wifiset Done!";
+                buttonWifiSetup.IsEnabled = false;
+            }
         }
 
         private async void BScan_Click(object sender, RoutedEventArgs e)
@@ -46,32 +84,24 @@ namespace WIFIScan
             listBox1.Items.Clear();
             areaNb++;
             Areas.Add(areaNb, "area" + areaNb);
-            // RequestAccessAsync must have been called at least once by the app before using the API
-            // Calling it multiple times is fine but not necessary
-            // RequestAccessAsync must be called from the UI thread
-            var access = await WiFiAdapter.RequestAccessAsync();
-            if (access != WiFiAccessStatus.Allowed)
+            if (GlobalStuff.WifiAccessState == false)
             {
                 MesajFin.Text = "acces denied!";
             }
             else
             {
                 MesajFin.Text = "acces allowed!";
-                if (wiFiAdapters == null)
-                {
-                    wiFiAdapters = await WiFiAdapter.FindAllAdaptersAsync();
-                }
-                adapter = wiFiAdapters.First();
 
                 //ten scans to build the map
-                for (int cnt = 0; cnt < 10; cnt++)
+                for (int cnt = 0; cnt < 2; cnt++)
                 {
-                    await adapter.ScanAsync(); //scan
-                    report = adapter.NetworkReport;
+                    await GlobalStuff.AdapterWifi.ScanAsync(); //scan
+                    report = GlobalStuff.AdapterWifi.NetworkReport;
                     foreach (var network in report.AvailableNetworks)
                     {
                         // listBox1.Items.Add(network.Ssid + " " + network.NetworkRssiInDecibelMilliwatts + "dBm");
-                        scanVals.Add(network.Ssid, network.NetworkRssiInDecibelMilliwatts.ToString());
+                        //scanVals.Add(network.Ssid, network.NetworkRssiInDecibelMilliwatts.ToString());
+                        scanVals.Add(network.Bssid, network.NetworkRssiInDecibelMilliwatts.ToString());
                     }
 
                 }//end of ten scans
@@ -103,6 +133,7 @@ namespace WIFIScan
                 //  MesajFin.Text = String.Format("DSDSdss");
             }
         }
+
         //store it in a dict of dicts, put it in a file, import it into the client soft, make a scan, arange scan results by power
         // look for first 3 in each areas and compute the mean error, if not found in an area, put error max, if error max for all areas,
         // drop that specific network and take the next network in list till, there is at least one area with error different thant max or
@@ -163,28 +194,42 @@ namespace WIFIScan
             }
         }
 
+        private void ButtonGoToSetup_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Setup));
+        }
+
+        private void buttonClientPage_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Client));
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(GridSetup));
+        }
+
         private async void ClientBtn_Click(object sender, RoutedEventArgs e)
         {
-            var access2 = await WiFiAdapter.RequestAccessAsync();
-            if (access2 != WiFiAccessStatus.Allowed)
+            if (GlobalStuff.WifiAccessState == false)
             {
                 MesajFin.Text = "acces denied!";
             }
             else
             {
                 MesajFin.Text = "acces allowed!";
-                if (wiFiAdapters == null)
+
+                for (int cnt = 0; cnt < 2; cnt++)
                 {
-                    wiFiAdapters = await WiFiAdapter.FindAllAdaptersAsync();
-                }
-                adapter2 = wiFiAdapters.First();
-                await adapter2.ScanAsync(); //scan
-                report = adapter2.NetworkReport;
-                scanVals.Clear();
-                foreach (var network in report.AvailableNetworks)
-                {
-                    //listBox1.Items.Add(network.Ssid + " " + network.NetworkRssiInDecibelMilliwatts + "dBm");
-                    scanVals.Add(network.Ssid, network.NetworkRssiInDecibelMilliwatts.ToString());
+                    await GlobalStuff.AdapterWifi.ScanAsync(); //scan
+                    report = GlobalStuff.AdapterWifi.NetworkReport;
+
+                    foreach (var network in report.AvailableNetworks)
+                    {
+                        //listBox1.Items.Add(network.Ssid + " " + network.NetworkRssiInDecibelMilliwatts + "dBm");
+                        //scanVals.Add(network.Ssid, network.NetworkRssiInDecibelMilliwatts.ToString());
+                        scanVals.Add(network.Bssid, network.NetworkRssiInDecibelMilliwatts.ToString());
+                    }
                 }
                 List<int> dbmValues;
                 foreach (String key in scanVals.AllKeys)
@@ -214,6 +259,7 @@ namespace WIFIScan
                 //error
             }
         }
+
         private void ComputeBtn_Click(object sender, RoutedEventArgs e)
         {
             if (myList == null || myList.Count() == 0)
@@ -222,6 +268,7 @@ namespace WIFIScan
             }
             else
             {
+                distanceList = new List<KeyValuePair<string, double>>();
                 int NbofNetworks = 3; //how many networks we are considering
                 if (myList.Count() < NbofNetworks)
                 {
@@ -252,6 +299,10 @@ namespace WIFIScan
 
                         //   }
                     }
+                    //compute distance
+                    //distanceList[inc].Value = calculateDistance(distanceList[inc].Value);
+                    //var newEntry = new KeyValuePair<string, double>(network.Key, calculateDistance(network.Value));
+                    distanceList.Add(new KeyValuePair<string, double>(network.Key, calculateDistance(network.Value)));
                     if (NbOfNetworkNotFound == WifiMapImported.Count() && NbofNetworks < myList.Count() - 1)
                     {
                         NbofNetworks++;
@@ -280,9 +331,19 @@ namespace WIFIScan
                 {
                     listBox1.Items.Add(netw.Key + " " + netw.Value);
                 }
+                listBox1.Items.Add("calculated distances in meters");
+                foreach (KeyValuePair<string, double> dist in distanceList)
+                {
+                    listBox1.Items.Add(dist.Key + " " + dist.Value);
+                }
             }
         }//end function
 
+        private double calculateDistance(double signalLevelInDbm)
+        {
+            double exp = (27.55 - (20 * Math.Log10(2412)) + Math.Abs(signalLevelInDbm)) / 20.0;
+            return Math.Pow(10.0, exp);
+        }
 
-    }//end class
+        }//end class
 }//end namespace

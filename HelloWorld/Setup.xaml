@@ -1,0 +1,31 @@
+﻿<Page
+    x:Class="WIFIScan.Setup"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WIFIScan"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TextBox x:Name="textboxTitle" HorizontalAlignment="Left" Margin="45,10,0,0" TextWrapping="Wrap" Text="Setup page" VerticalAlignment="Top" BorderThickness="0" FontSize="32"/>
+        <Button x:Name="buttonScan" Content="Scan for networks" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top" Click="button_Click"/>
+        <ListBox x:Name="listboxWifi" HorizontalAlignment="Left" Height="240" Margin="10,136,0,0" VerticalAlignment="Top" Width="256" SelectionChanged="listboxWifi_SelectionChanged"/>
+        <TextBox x:Name="textboxMessage" HorizontalAlignment="Left" Margin="213,90,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" BorderThickness="0"/>
+        <Button x:Name="buttonMain" Content="MainPage" HorizontalAlignment="Left" Margin="271,29,0,0" VerticalAlignment="Top" Click="buttonMain_Click"/>
+        <TextBox x:Name="textBoxDistance" HorizontalAlignment="Left" Margin="10,381,0,0" TextWrapping="Wrap" Text="Enter distance" VerticalAlignment="Top" InputScope="Number" GotFocus="TextBox_GotFocus" MaxLength="2" TextChanging="textBoxDistance_TextChanging" TextChanged="textBoxDistance_TextChanged"/>
+        <Button x:Name="buttonCalibrate" Content="Calibrate" HorizontalAlignment="Left" Margin="187,381,0,0" VerticalAlignment="Top" Click="buttonCalibrate_Click"/>
+        <ListBox x:Name="listBoxTest" HorizontalAlignment="Left" Height="100" Margin="10,478,0,0" VerticalAlignment="Top" Width="213"/>
+        <Button x:Name="buttonToJSON" Content="ToJSON" HorizontalAlignment="Left" Margin="10,438,0,0" VerticalAlignment="Top" Click="buttonToJSON_Click"/>
+        <Button x:Name="buttonApPos" Content="SetApXY" HorizontalAlignment="Left" Margin="271,66,0,0" VerticalAlignment="Top" Click="buttonApPos_Click"/>
+        <ListBox x:Name="listBoxJson" HorizontalAlignment="Left" Height="100" Margin="228,478,0,0" VerticalAlignment="Top" Width="100"/>
+        <TextBlock x:Name="textBlockxPos" HorizontalAlignment="Left" Margin="10,416,0,0" TextWrapping="Wrap" Text="xPos:" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlockyPos" HorizontalAlignment="Left" Margin="121,416,0,0" TextWrapping="Wrap" Text="yPos:" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlockXposVal" HorizontalAlignment="Left" Margin="45,416,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlockYposVal" HorizontalAlignment="Left" Margin="160,416,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top"/>
+
+
+
+
+    </Grid>
+</Page>
