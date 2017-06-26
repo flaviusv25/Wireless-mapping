@@ -1,0 +1,21 @@
+﻿<Page
+    x:Class="WIFIScan.Client"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WIFIScan"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Grid_Loaded">
+        <TextBlock x:Name="textblockTitle" HorizontalAlignment="Left" Margin="45,10,0,0" TextWrapping="Wrap" Text="Client Page" VerticalAlignment="Top"  FontSize="32"/>
+        <Button x:Name="buttonScan" Content="Find location" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top" Click="button_Click"/>
+        <ListBox x:Name="listboxWifi" HorizontalAlignment="Left" Height="240" Margin="203,136,0,0" VerticalAlignment="Top" Width="147"/>
+        <TextBlock x:Name="textblockMessage" HorizontalAlignment="Left" Margin="213,90,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" />
+        <Button x:Name="buttonMain" Content="MainPage" HorizontalAlignment="Left" Margin="271,29,0,0" VerticalAlignment="Top" Click="buttonMain_Click"/>
+        <ListBox x:Name="listBoxJson" HorizontalAlignment="Left" Height="100" Margin="228,478,0,0" VerticalAlignment="Top" Width="100"/>
+        <ListBox x:Name="listBoxTest" HorizontalAlignment="Left" Height="100" Margin="10,478,0,0" VerticalAlignment="Top" Width="213"/>
+        <ListBox x:Name="listboxAreas" HorizontalAlignment="Left" Height="240" Margin="10,136,0,0" VerticalAlignment="Top" Width="175"/>
+
+    </Grid>
+</Page>
